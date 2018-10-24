@@ -19,7 +19,7 @@ If you are windows user who uses python for the first time, I recommend to insta
 The input parameters are as follows:<br>
 
 - ***dir_name*** <br>
-Name of directory that includes the results obtained by SALMON.
+Name of directory that includes the results obtained by SALMON. Default is `'./'`.
 
 - ***make_ani*** <br>
 Enable(`'y'`)/disable(`'n'`) making an animation file. If `'all'`, all animation files depending on `obs_ani`, `var_ani`, `com_ani`, and `pla_ani` are made. 
