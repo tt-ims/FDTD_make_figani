@@ -8,6 +8,8 @@
 
  - Python 3
  - NumPy
+ - matplotlib
+ - ffmpeg
 
 If you are windows user who uses python for the first time, I recommend to install [WinPython](https://sourceforge.net/projects/winpython/) that includes all requirements for this program.
 
