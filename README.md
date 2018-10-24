@@ -25,16 +25,16 @@ Name of directory that includes the results obtained by SALMON.
 Enable(`'y'`)/disable(`'n'`) making an animation file. If `'all'`, all animation files related to `obs_ani`, `var_ani`, `com_ani`, and `pla_ani` are made. 
 
 - ***obs_ani*** <br>
-Tes.
+Observation point number that is used for making the animation.
 
 - ***var_ani*** <br>
-Tes.
+Name of varialbe that is used for making the animation. `'e'` and `'h'` can be chosen.
 
 - ***com_ani*** <br>
-Tes.
+Name of component that is used for making the animation. `'x'`, `'y'`, `'z'`, and `'abs'` can be chosen.
 
 - ***pla_ani*** <br>
-Tes.
+Name of plane that is used for making the animation. `'xy'`, `'yz'`, and `'xz'` can be chosen.
 
 - ***frame_speed_ani*** <br>
 Tes.
