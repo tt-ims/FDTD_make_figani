@@ -3,15 +3,15 @@
 ######################################################################
 
 #Basic inputs#########################################################
-dir_name = './result/'
-make_ani = 'y'
-obs_ani = 1
-var_ani = 'e'
-com_ani = 'abs'
-pla_ani = 'xy'
+dir_name        = './result/'
+make_ani        = 'y'
+obs_ani         = 1
+var_ani         = 'e'
+com_ani         = 'abs'
+pla_ani         = 'xy'
+frame_speed_ani =  5.0d1
 
 #Additional inputs####################################################
-#frame_speed_ani =  5.0d1
 #e_min_fig       = -3.0d0
 #e_max_fig       =  3.0d0
 #h_min_fig       = -3.0d0
