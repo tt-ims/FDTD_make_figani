@@ -1,6 +1,8 @@
-# FDTD_make_shape
+# FDTD_make_figani
 
 [SALMON](https://salmon-tddft.jp/) has a FDTD functionality to simulate electromagnetic problems. This program makes the input shape file.
+
+![figure](misc/sample2.mp4)
 
 ## Requirements
 
