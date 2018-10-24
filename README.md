@@ -2,6 +2,8 @@
 
 [SALMON](https://salmon-tddft.jp/) has a FDTD functionality to simulate electromagnetic problems. This program makes the input shape file.
 
+![figure](misc/sample2.gif)
+
 ## Requirements
 
  - Python 3
