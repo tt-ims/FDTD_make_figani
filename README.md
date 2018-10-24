@@ -22,7 +22,7 @@ The input parameters are as follows:<br>
 Name of directory that includes the results obtained by SALMON. Default is `'./'`.
 
 - ***make_ani*** <br>
-Enable(`'y'`)/disable(`'n'`) making an animation file. If `'all'`, all animation files depending on `obs_ani`, `var_ani`, `com_ani`, and `pla_ani` are made. 
+Enable(`'y'`)/disable(`'n'`) making an animation file. If `'all'`, all animation files depending on `obs_ani`, `var_ani`, `com_ani`, and `pla_ani` are made. But, this `'all'` option requires a lot of memory.
 
 - ***obs_ani*** <br>
 Observation point number that is used for making the animation.
