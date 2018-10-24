@@ -19,10 +19,10 @@ If you are windows user who uses python for the first time, I recommend to insta
 The input parameters are as follows:<br>
 
 - ***dir_name*** <br>
-Tes.
+Name of directory that includes the results obtained by SALMON.
 
 - ***make_ani*** <br>
-Tes.
+Enable(`'y'`)/disable(`'n'`) making an animation file. If `'all'`, all animation files related to `obs_ani`, `var_ani`, `com_ani`, and `pla_ani` are made. 
 
 - ***obs_ani*** <br>
 Tes.
