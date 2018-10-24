@@ -37,7 +37,7 @@ Name of component that is used for making the animation. `'x'`, `'y'`, `'z'`, an
 Name of plane that is used for making the animation. `'xy'`, `'yz'`, and `'xz'` can be chosen.
 
 - ***frame_speed_ani*** <br>
-Time for 1 frame in the animation.
+Time for 1 frame in the animation. The unit is millisecond.
 
 - ***e_max_fig/e_min_fig*** <br>
 Maximum/Minimum of the electric filed in the figure file.
