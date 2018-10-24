@@ -12,17 +12,17 @@ pla_ani         = 'xy'
 frame_speed_ani =  5.0d1
 
 #Additional inputs####################################################
-#e_min_fig       = -3.0d0
 #e_max_fig       =  3.0d0
-#h_min_fig       = -3.0d0
+#e_min_fig       = -3.0d0
 #h_max_fig       =  3.0d0
-#e_min_ani       = -0.0d0
+#h_min_fig       = -3.0d0
 #e_max_ani       =  3.0d0
-#h_min_ani       = -3.0d0
+#e_min_ani       = -3.0d0
 #h_max_ani       =  3.0d0
-#x_min_ani       = -3.0d0
+#h_min_ani       = -3.0d0
 #x_max_ani       =  3.0d0
-#y_min_ani       = -3.0d0
+#x_min_ani       = -3.0d0
 #y_max_ani       =  3.0d0
-#z_min_ani       = -3.0d0
+#y_min_ani       = -3.0d0
 #z_max_ani       =  3.0d0
+#z_min_ani       = -3.0d0
