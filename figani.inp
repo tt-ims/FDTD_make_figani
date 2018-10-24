@@ -1,5 +1,5 @@
 #CAUTION:#############################################################
-# * dir_name: Default= './'                                          #
+# * dir_name: Default is './'.                                       #
 # * make_ani: 'y', 'n', and 'all' can be chosen.                     #
 # * var_ani:  'e' and 'h' can be chosen.                             #
 # * com_ani:  'x', 'y', 'z', and 'abs' can be chosen.                #
