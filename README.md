@@ -37,28 +37,28 @@ Name of component that is used for making the animation. `'x'`, `'y'`, `'z'`, an
 Name of plane that is used for making the animation. `'xy'`, `'yz'`, and `'xz'` can be chosen.
 
 - ***frame_speed_ani*** <br>
-Tes.
+Time for 1 frame in the animation.
 
 - ***e_max_fig/e_min_fig*** <br>
-Tes.
+Maximum/Minimum of the electric filed in the figure file.
 
 - ***h_max_fig/h_min_fig*** <br>
-Tes.
+Maximum/Minimum of the magnetic filed in the figure file.
 
 - ***e_max_ani/e_min_ani*** <br>
-Tes.
+Maximum/Minimum of the electric filed in the animation file.
 
 - ***h_max_ani/h_min_ani*** <br>
-Tes.
+Maximum/Minimum of the magnetic filed in the figure file.
 
 - ***x_max_ani/x_min_ani*** <br>
-Tes.
+Maximum/Minimum of the x axis in the figure file.
 
 - ***y_max_ani/y_min_ani*** <br>
-Tes.
+Maximum/Minimum of the y axis in the figure file.
 
 - ***z_max_ani/z_min_ani*** <br>
-Tes.
+Maximum/Minimum of the z axis in the figure file.
 
 ## External Links
 
