@@ -15,7 +15,7 @@ If you are windows user who uses python for the first time, I recommend to insta
 
 ## Usage
 
-`make_shape.py` is an executable file. `shape.inp` is a input file. `make_shape.py` and `shape.inp` **must be in the same hierarchy**.<br><br>
+`make_figani.py` is an executable file. `figani.inp` is a input file. `make_figani.py` and `figani.inp` **must be in the same hierarchy**.<br><br>
 The input parameters are as follows:<br>
 
 - ***al_em(3)*** <br>
