@@ -1,6 +1,6 @@
 # FDTD_make_figani
 
-[SALMON](https://salmon-tddft.jp/) has a FDTD functionality to simulate electromagnetic problems. This program makes figures and animations from the results obtained by SALMON.
+[SALMON](https://salmon-tddft.jp/) has a FDTD functionality to solve electromagnetic problems. This program makes figures and animations from the results obtained by SALMON.
 
 ![figure](misc/sample.gif)
 
