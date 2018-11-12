@@ -15,7 +15,7 @@ If you are windows user who uses python for the first time, I recommend to insta
 
 ## Usage
 
-`make_figani.py` is an executable file. `figani.inp` is a input file. `make_figani.py` and `figani.inp` **must be in the same directory**.<br><br>
+`make_figani.py` is an executable file. `figani.inp` is a input file. `make_figani.py` and `figani.inp` **must be in the same directory**.  When you use WinPython, open `make_figani.py` by Spyder that is included in WinPython and push F5 key.<br><br>
 The input parameters are as follows:<br>
 
 - ***dir_name*** <br>
