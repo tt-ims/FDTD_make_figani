@@ -94,6 +94,7 @@ for i in range(3):
     if lg_sta[i]<=0:
         lg_adj[i]=-lg_sta[i]
         lg_end[i]=lg_end[i]+lg_adj[i]+1;
+    elif iperiodic==3: lg_adj[i]=-1;
 del i
 #prepare figure
 t_axis=np.zeros(nt)
