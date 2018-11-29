@@ -66,8 +66,8 @@ iobs_num_em=0; iobs_samp_em=0; e_max=0; h_max=0;
 f = open('figani.inp')
 tmp_inp = f.readlines()
 f.close()
-tmp_inp = [s.replace('d', 'e') for s in tmp_inp]
-tmp_inp = [s.replace('eir_name', 'dir_name') for s in tmp_inp]
+for i in range(len(tmp_inp)):
+    if tmp_inp[i].count('dir_name')==0: tmp_inp[i]=tmp_inp[i].replace('d', 'e')
 tmp_inp = [s.replace('frame_speee_ani', 'frame_speed_ani') for s in tmp_inp]
 for i in range(len(tmp_inp)):
     exec(tmp_inp[i])
