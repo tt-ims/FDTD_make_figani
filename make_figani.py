@@ -61,7 +61,8 @@ y_min_ani='none'; y_max_ani='none';
 z_min_ani='none'; z_max_ani='none';
 unit_system  = 'none'; iperiodic=0; dt_em=0; nt_em=0;
 al_em=0, 0, 0; dl_em=0, 0, 0; lg_sta=0, 0, 0; lg_end=0, 0, 0;
-iobs_num_em=0; iobs_samp_em=0; e_max=0; h_max=0;
+iobs_num_em=0; iobs_samp_em=0; obs_plane_em=init_1d_list(200);
+e_max=0; h_max=0;
 #load input file
 f = open('figani.inp')
 tmp_inp = f.readlines()
@@ -79,6 +80,10 @@ f.close()
 tmp_inp = [s.replace('au', '\'au\'') for s in tmp_inp]
 tmp_inp = [s.replace('a.u.', '\'a.u.\'') for s in tmp_inp]
 tmp_inp = [s.replace('A_eV_fs', '\'A_eV_fs\'') for s in tmp_inp]
+tmp_inp = [s.replace('(', '[') for s in tmp_inp]
+tmp_inp = [s.replace(')', ']') for s in tmp_inp]
+tmp_inp = [s.replace('  y', '\'y\'') for s in tmp_inp]
+tmp_inp = [s.replace('  n', '\'n\'') for s in tmp_inp]
 for i in range(len(tmp_inp)):
     exec(tmp_inp[i])
 del tmp_inp, i
@@ -189,146 +194,150 @@ if make_ani=='y': #chosed animation-------------------------------------------#
     #check condition
     if obs_ani=='none' or var_ani=='none' or com_ani=='none' or pla_ani=='none':
         sy.exit('When make_ani=\'y\', you have to set obs_ani, var_ani, com_ani, and pla_ani.')
-    #initialize animation
-    if pla_ani=='xy':
-        pla_ani='_xy_'; iord1=0; iord2=1; paxis1=x_xy; paxis2=y_xy;
-        min1=x_min_ani; max1=x_max_ani; min2=y_min_ani; max2=y_max_ani;
-    elif pla_ani=='yz':
-        pla_ani='_yz_'; iord1=1; iord2=2; paxis1=y_yz; paxis2=z_yz;
-        min1=y_min_ani; max1=y_max_ani; min2=z_min_ani; max2=z_max_ani;
-    elif pla_ani=='xz':
-        pla_ani='_xz_'; iord1=0; iord2=2; paxis1=x_xz; paxis2=z_xz;
-        min1=x_min_ani; max1=x_max_ani; min2=z_min_ani; max2=z_max_ani;
-    if   var_ani=='e': minc=e_min_ani; maxc=e_max_ani;
-    elif var_ani=='h': minc=h_min_ani; maxc=h_max_ani;
-    fig_num=2*iobs_num_em+1
-    pl.close(fig_num)
-    fig, ax=pl.subplots(num=fig_num,figsize=(12,8))
-    mappable=0; ims=[]; iflag_clear=0;
-    #make animation
-    for itime in range(nt): #time loop
-        fani=np.zeros((lg_end[iord1],lg_end[iord2]))
-        #load data
-        if com_ani!='abs':
-            f=open(dir_name+'obs'+str(obs_ani)+'_'+var_ani+com_ani+pla_ani+str((itime+1)*iobs_samp_em)+'.data')
-            tmp_inp = f.readlines()
-            f.close()
-            tmp_inp = [s.replace('\n','') for s in tmp_inp]
-            for i in range(len(tmp_inp)):
-                tmp_inp2=tmp_inp[i]
-                tmp_inp2=tmp_inp2.split()
-                fani[int(tmp_inp2[0])+lg_adj[iord1],int(tmp_inp2[1])+lg_adj[iord2]]=tmp_inp2[2]
-            del tmp_inp, tmp_inp2, i
-        elif com_ani=='abs':
-            minc=0;
-            fx=np.zeros((lg_end[iord1],lg_end[iord2]));
-            fy=np.zeros((lg_end[iord1],lg_end[iord2]));
-            fz=np.zeros((lg_end[iord1],lg_end[iord2]));
-            for icom2 in range(3):
-                if icom2==0:   ncom2='x'
-                elif icom2==1: ncom2='y'
-                elif icom2==2: ncom2='z'
-                f=open(dir_name+'obs'+str(obs_ani)+'_'+var_ani+ncom2+pla_ani+str((itime+1)*iobs_samp_em)+'.data')
+    if obs_plane_em[obs_ani]=='n':
+        sy.exit('When make_ani=\'y\', you have to set proper obs_ani.')
+    elif obs_plane_em[obs_ani]=='y':
+        #initialize animation
+        if pla_ani=='xy':
+            pla_ani='_xy_'; iord1=0; iord2=1; paxis1=x_xy; paxis2=y_xy;
+            min1=x_min_ani; max1=x_max_ani; min2=y_min_ani; max2=y_max_ani;
+        elif pla_ani=='yz':
+            pla_ani='_yz_'; iord1=1; iord2=2; paxis1=y_yz; paxis2=z_yz;
+            min1=y_min_ani; max1=y_max_ani; min2=z_min_ani; max2=z_max_ani;
+        elif pla_ani=='xz':
+            pla_ani='_xz_'; iord1=0; iord2=2; paxis1=x_xz; paxis2=z_xz;
+            min1=x_min_ani; max1=x_max_ani; min2=z_min_ani; max2=z_max_ani;
+        if   var_ani=='e': minc=e_min_ani; maxc=e_max_ani;
+        elif var_ani=='h': minc=h_min_ani; maxc=h_max_ani;
+        fig_num=2*iobs_num_em+1
+        pl.close(fig_num)
+        fig, ax=pl.subplots(num=fig_num,figsize=(12,8))
+        mappable=0; ims=[]; iflag_clear=0;
+        #make animation
+        for itime in range(nt): #time loop
+            fani=np.zeros((lg_end[iord1],lg_end[iord2]))
+            #load data
+            if com_ani!='abs':
+                f=open(dir_name+'obs'+str(obs_ani)+'_'+var_ani+com_ani+pla_ani+str((itime+1)*iobs_samp_em)+'.data')
                 tmp_inp = f.readlines()
                 f.close()
                 tmp_inp = [s.replace('\n','') for s in tmp_inp]
                 for i in range(len(tmp_inp)):
                     tmp_inp2=tmp_inp[i]
                     tmp_inp2=tmp_inp2.split()
-                    exec('f'+ncom2+'[int(tmp_inp2[0])+lg_adj[iord1],int(tmp_inp2[1])+lg_adj[iord2]]=tmp_inp2[2]')
-            fani=np.sqrt( np.power(fx,2)+np.power(fy,2)+np.power(fz,2) )
-            del tmp_inp, tmp_inp2, i, fx, fy, fz, icom2, ncom2
-        #draw animation
-        mappable=ax.pcolorfast(paxis1,paxis2,fani.transpose(),cmap="jet",animated=True)
-        if iflag_clear==0:
-            pl.colorbar(mappable)
-            iflag_clear=1
-        mappable.set_clim(minc,maxc)
-        set_figenv2(ax,[min1,max1],[min2,max2], \
-                    'obs'+str(obs_ani)+' '+var_ani.upper()+com_ani+' '+pla_ani[1:3]+'-plane', \
-                    name_l,name_l)
-        ims.append([mappable])
-    #save animation
-    ani = an.ArtistAnimation(fig, ims, interval=frame_speed_ani, blit=True, repeat_delay=1000);
-    ani.save('obs'+str(obs_ani)+'_'+var_ani.upper()+com_ani+'_'+pla_ani[1:3]+'-plane'+'.mp4', writer="ffmpeg");
-    del ani, itime, fig_num, iord1, iord2, \
-        minc, maxc, min1, max1, min2, max2, \
-        paxis1, paxis2, ims, iflag_clear, fani, fig, ax, mappable
+                    fani[int(tmp_inp2[0])+lg_adj[iord1],int(tmp_inp2[1])+lg_adj[iord2]]=tmp_inp2[2]
+                del tmp_inp, tmp_inp2, i
+            elif com_ani=='abs':
+                minc=0;
+                fx=np.zeros((lg_end[iord1],lg_end[iord2]));
+                fy=np.zeros((lg_end[iord1],lg_end[iord2]));
+                fz=np.zeros((lg_end[iord1],lg_end[iord2]));
+                for icom2 in range(3):
+                    if icom2==0:   ncom2='x'
+                    elif icom2==1: ncom2='y'
+                    elif icom2==2: ncom2='z'
+                    f=open(dir_name+'obs'+str(obs_ani)+'_'+var_ani+ncom2+pla_ani+str((itime+1)*iobs_samp_em)+'.data')
+                    tmp_inp = f.readlines()
+                    f.close()
+                    tmp_inp = [s.replace('\n','') for s in tmp_inp]
+                    for i in range(len(tmp_inp)):
+                        tmp_inp2=tmp_inp[i]
+                        tmp_inp2=tmp_inp2.split()
+                        exec('f'+ncom2+'[int(tmp_inp2[0])+lg_adj[iord1],int(tmp_inp2[1])+lg_adj[iord2]]=tmp_inp2[2]')
+                fani=np.sqrt( np.power(fx,2)+np.power(fy,2)+np.power(fz,2) )
+                del tmp_inp, tmp_inp2, i, fx, fy, fz, icom2, ncom2
+            #draw animation
+            mappable=ax.pcolorfast(paxis1,paxis2,fani.transpose(),cmap="jet",animated=True)
+            if iflag_clear==0:
+                pl.colorbar(mappable)
+                iflag_clear=1
+            mappable.set_clim(minc,maxc)
+            set_figenv2(ax,[min1,max1],[min2,max2], \
+                        'obs'+str(obs_ani)+' '+var_ani.upper()+com_ani+' '+pla_ani[1:3]+'-plane', \
+                        name_l,name_l)
+            ims.append([mappable])
+        #save animation
+        ani = an.ArtistAnimation(fig, ims, interval=frame_speed_ani, blit=True, repeat_delay=1000);
+        ani.save('obs'+str(obs_ani)+'_'+var_ani.upper()+com_ani+'_'+pla_ani[1:3]+'-plane'+'.mp4', writer="ffmpeg");
+        del ani, itime, fig_num, iord1, iord2, \
+            minc, maxc, min1, max1, min2, max2, \
+            paxis1, paxis2, ims, iflag_clear, fani, fig, ax, mappable
 elif make_ani=='all': #all animation#-----------------------------------------#
     #start
     for iobs in range(iobs_num_em): #observation point loop
-        for ivar in range(2): #variable loop
-            if   ivar==0: nvar='e'
-            elif ivar==1: nvar='h'
-            for ipla in range(3): #plane loop
-                if ipla==0:
-                    npla='_xy_'; iord1=0; iord2=1; paxis1=x_xy; paxis2=y_xy;
-                    min1=x_min_ani; max1=x_max_ani; min2=y_min_ani; max2=y_max_ani;
-                elif ipla==1:
-                    npla='_yz_'; iord1=1; iord2=2; paxis1=y_yz; paxis2=z_yz;
-                    min1=y_min_ani; max1=y_max_ani; min2=z_min_ani; max2=z_max_ani;
-                elif ipla==2:
-                    npla='_xz_'; iord1=0; iord2=2; paxis1=x_xz; paxis2=z_xz;
-                    min1=x_min_ani; max1=x_max_ani; min2=z_min_ani; max2=z_max_ani;
-                if   nvar=='e': minc=e_min_ani; maxc=e_max_ani;
-                elif nvar=='h': minc=h_min_ani; maxc=h_max_ani;
-                for icom in range(4): #component loop
-                    if icom==0:   ncom='x'
-                    elif icom==1: ncom='y'
-                    elif icom==2: ncom='z'
-                    elif icom==3: ncom='abs';
-                    #initialize animation
-                    fig_num=2*iobs_num_em+2*3*4*iobs+3*4*ivar+4*ipla+(icom+1)
-                    pl.close(fig_num)
-                    fig, ax=pl.subplots(num=fig_num,figsize=(12,8))
-                    mappable=0; ims=[]; iflag_clear=0;
-                    #make animation
-                    for itime in range(nt): #time loop
-                        fani=np.zeros((lg_end[iord1],lg_end[iord2]))
-                        #load data
-                        if icom<3:
-                            f=open(dir_name+'obs'+str(iobs+1)+'_'+nvar+ncom+npla+str((itime+1)*iobs_samp_em)+'.data')
-                            tmp_inp = f.readlines()
-                            f.close()
-                            tmp_inp = [s.replace('\n','') for s in tmp_inp]
-                            for i in range(len(tmp_inp)):
-                                tmp_inp2=tmp_inp[i]
-                                tmp_inp2=tmp_inp2.split()
-                                fani[int(tmp_inp2[0])+lg_adj[iord1],int(tmp_inp2[1])+lg_adj[iord2]]=tmp_inp2[2]
-                            del tmp_inp, tmp_inp2, i
-                        elif icom==3:
-                            minc=0;
-                            fx=np.zeros((lg_end[iord1],lg_end[iord2]));
-                            fy=np.zeros((lg_end[iord1],lg_end[iord2]));
-                            fz=np.zeros((lg_end[iord1],lg_end[iord2]));
-                            for icom2 in range(3):
-                                if icom2==0:   ncom2='x'
-                                elif icom2==1: ncom2='y'
-                                elif icom2==2: ncom2='z'
-                                f=open(dir_name+'obs'+str(iobs+1)+'_'+nvar+ncom2+npla+str((itime+1)*iobs_samp_em)+'.data')
+        if obs_plane_em[iobs+1]=='y':
+            for ivar in range(2): #variable loop
+                if   ivar==0: nvar='e'
+                elif ivar==1: nvar='h'
+                for ipla in range(3): #plane loop
+                    if ipla==0:
+                        npla='_xy_'; iord1=0; iord2=1; paxis1=x_xy; paxis2=y_xy;
+                        min1=x_min_ani; max1=x_max_ani; min2=y_min_ani; max2=y_max_ani;
+                    elif ipla==1:
+                        npla='_yz_'; iord1=1; iord2=2; paxis1=y_yz; paxis2=z_yz;
+                        min1=y_min_ani; max1=y_max_ani; min2=z_min_ani; max2=z_max_ani;
+                    elif ipla==2:
+                        npla='_xz_'; iord1=0; iord2=2; paxis1=x_xz; paxis2=z_xz;
+                        min1=x_min_ani; max1=x_max_ani; min2=z_min_ani; max2=z_max_ani;
+                    if   nvar=='e': minc=e_min_ani; maxc=e_max_ani;
+                    elif nvar=='h': minc=h_min_ani; maxc=h_max_ani;
+                    for icom in range(4): #component loop
+                        if icom==0:   ncom='x'
+                        elif icom==1: ncom='y'
+                        elif icom==2: ncom='z'
+                        elif icom==3: ncom='abs';
+                        #initialize animation
+                        fig_num=2*iobs_num_em+2*3*4*iobs+3*4*ivar+4*ipla+(icom+1)
+                        pl.close(fig_num)
+                        fig, ax=pl.subplots(num=fig_num,figsize=(12,8))
+                        mappable=0; ims=[]; iflag_clear=0;
+                        #make animation
+                        for itime in range(nt): #time loop
+                            fani=np.zeros((lg_end[iord1],lg_end[iord2]))
+                            #load data
+                            if icom<3:
+                                f=open(dir_name+'obs'+str(iobs+1)+'_'+nvar+ncom+npla+str((itime+1)*iobs_samp_em)+'.data')
                                 tmp_inp = f.readlines()
                                 f.close()
                                 tmp_inp = [s.replace('\n','') for s in tmp_inp]
                                 for i in range(len(tmp_inp)):
                                     tmp_inp2=tmp_inp[i]
                                     tmp_inp2=tmp_inp2.split()
-                                    exec('f'+ncom2+'[int(tmp_inp2[0])+lg_adj[iord1],int(tmp_inp2[1])+lg_adj[iord2]]=tmp_inp2[2]')
-                            fani=np.sqrt( np.power(fx,2)+np.power(fy,2)+np.power(fz,2) )
-                            del tmp_inp, tmp_inp2, i, fx, fy, fz, icom2, ncom2
-                        #draw animation
-                        mappable=ax.pcolorfast(paxis1,paxis2,fani.transpose(),cmap="jet",animated=True)
-                        if iflag_clear==0:
-                            pl.colorbar(mappable)
-                            iflag_clear=1
-                        mappable.set_clim(minc,maxc)
-                        set_figenv2(ax,[min1,max1],[min2,max2], \
-                                    'obs'+str(iobs+1)+' '+nvar.upper()+ncom+' '+npla[1:3]+'-plane', \
-                                    name_l,name_l)
-                        ims.append([mappable])
-                    #save animation
-                    ani = an.ArtistAnimation(fig, ims, interval=frame_speed_ani, blit=True, repeat_delay=1000);
-                    ani.save('obs'+str(iobs+1)+'_'+nvar.upper()+ncom+'_'+npla[1:3]+'-plane'+'.mp4', writer="ffmpeg");
-                    del ani
+                                    fani[int(tmp_inp2[0])+lg_adj[iord1],int(tmp_inp2[1])+lg_adj[iord2]]=tmp_inp2[2]
+                                del tmp_inp, tmp_inp2, i
+                            elif icom==3:
+                                minc=0;
+                                fx=np.zeros((lg_end[iord1],lg_end[iord2]));
+                                fy=np.zeros((lg_end[iord1],lg_end[iord2]));
+                                fz=np.zeros((lg_end[iord1],lg_end[iord2]));
+                                for icom2 in range(3):
+                                    if icom2==0:   ncom2='x'
+                                    elif icom2==1: ncom2='y'
+                                    elif icom2==2: ncom2='z'
+                                    f=open(dir_name+'obs'+str(iobs+1)+'_'+nvar+ncom2+npla+str((itime+1)*iobs_samp_em)+'.data')
+                                    tmp_inp = f.readlines()
+                                    f.close()
+                                    tmp_inp = [s.replace('\n','') for s in tmp_inp]
+                                    for i in range(len(tmp_inp)):
+                                        tmp_inp2=tmp_inp[i]
+                                        tmp_inp2=tmp_inp2.split()
+                                        exec('f'+ncom2+'[int(tmp_inp2[0])+lg_adj[iord1],int(tmp_inp2[1])+lg_adj[iord2]]=tmp_inp2[2]')
+                                fani=np.sqrt( np.power(fx,2)+np.power(fy,2)+np.power(fz,2) )
+                                del tmp_inp, tmp_inp2, i, fx, fy, fz, icom2, ncom2
+                            #draw animation
+                            mappable=ax.pcolorfast(paxis1,paxis2,fani.transpose(),cmap="jet",animated=True)
+                            if iflag_clear==0:
+                                pl.colorbar(mappable)
+                                iflag_clear=1
+                            mappable.set_clim(minc,maxc)
+                            set_figenv2(ax,[min1,max1],[min2,max2], \
+                                        'obs'+str(iobs+1)+' '+nvar.upper()+ncom+' '+npla[1:3]+'-plane', \
+                                        name_l,name_l)
+                            ims.append([mappable])
+                        #save animation
+                        ani = an.ArtistAnimation(fig, ims, interval=frame_speed_ani, blit=True, repeat_delay=1000);
+                        ani.save('obs'+str(iobs+1)+'_'+nvar.upper()+ncom+'_'+npla[1:3]+'-plane'+'.mp4', writer="ffmpeg");
+                        del ani
     del iobs, ivar, ipla, icom, itime, fig_num, iord1, iord2, \
         minc, maxc, min1, max1, min2, max2, \
         ncom, nvar, npla, paxis1, paxis2, \
@@ -345,7 +354,7 @@ del dir_name, make_ani, obs_ani, var_ani, com_ani, pla_ani, frame_speed_ani, \
     e_min_ani, e_max_ani, h_min_ani, h_max_ani, \
     x_min_ani, x_max_ani, y_min_ani, y_max_ani, z_min_ani, z_max_ani, \
     unit_system, iperiodic, dt_em, nt_em, al_em, dl_em, lg_sta, lg_end, \
-    iobs_num_em, iobs_samp_em, e_max, h_max, \
+    iobs_num_em, iobs_samp_em, obs_plane_em, e_max, h_max, \
     nt, lg_adj, r_min, x1d, y1d, z1d, x_xy, y_xy, y_yz, z_yz, x_xz, z_xz, \
     start_time, elapsed_time
 del ex, ey, ez, hx, hy, hz, name_e, name_h, name_l, name_t, t_axis
