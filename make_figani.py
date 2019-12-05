@@ -59,9 +59,9 @@ e_min_ani='none'; e_max_ani='none'; h_min_ani='none'; h_max_ani='none';
 x_min_ani='none'; x_max_ani='none';
 y_min_ani='none'; y_max_ani='none';
 z_min_ani='none'; z_max_ani='none';
-unit_system  = 'none'; iperiodic=0; dt_em=0; nt_em=0;
+unit_system  = 'none'; yn_periodic='n'; dt_em=0; nt_em=0;
 al_em=0, 0, 0; dl_em=0, 0, 0; lg_sta=0, 0, 0; lg_end=0, 0, 0;
-iobs_num_em=0; iobs_samp_em=0; obs_plane_em=init_1d_list(200);
+obs_num_em=0; obs_samp_em=0; yn_obs_plane_em=init_1d_list(200);
 e_max=0; h_max=0;
 #load input file
 f = open('figani.inp')
@@ -89,7 +89,7 @@ for i in range(len(tmp_inp)):
 del tmp_inp, i
 al_em=list(al_em); dl_em=list(dl_em); lg_sta=list(lg_sta); lg_end=list(lg_end);
 #set data number
-nt=int(nt_em/iobs_samp_em)
+nt=int(nt_em/obs_samp_em)
 ###############################################################################
 #prepare making files##########################################################
 ###############################################################################
@@ -99,16 +99,16 @@ for i in range(3):
     if lg_sta[i]<=0:
         lg_adj[i]=-lg_sta[i]
         lg_end[i]=lg_end[i]+lg_adj[i]+1;
-    elif iperiodic==3: lg_adj[i]=-1;
+    elif yn_periodic=='y': lg_adj[i]=-1;
 del i
 #prepare figure
 t_axis=np.zeros(nt)
-ex=np.zeros((iobs_num_em,nt))
-ey=np.zeros((iobs_num_em,nt))
-ez=np.zeros((iobs_num_em,nt))
-hx=np.zeros((iobs_num_em,nt))
-hy=np.zeros((iobs_num_em,nt))
-hz=np.zeros((iobs_num_em,nt))
+ex=np.zeros((obs_num_em,nt))
+ey=np.zeros((obs_num_em,nt))
+ez=np.zeros((obs_num_em,nt))
+hx=np.zeros((obs_num_em,nt))
+hy=np.zeros((obs_num_em,nt))
+hz=np.zeros((obs_num_em,nt))
 #prepare axis name
 if unit_system=='au' or unit_system=='a.u.':
     name_l='a.u.'; name_e='a.u.'; name_h='a.u.'; name_t='a.u.';
@@ -117,9 +117,9 @@ elif unit_system=='A_eV_fs':
 #set spatial range
 r_min=init_1d_list(3);
 for i in range(3):
-    if iperiodic==0:
+    if   yn_periodic=='n':
         r_min[i]=-lg_end[i]*dl_em[i]/2;
-    elif iperiodic==3:
+    elif yn_periodic=='y':
         r_min[i]=0;
 del i
 #set spatial axis(+1 is introduced for pcolorfast)
@@ -155,7 +155,7 @@ if z_max_ani=='none': z_max_ani= max(z1d)
 #make figure files#############################################################
 ###############################################################################
 #load and make figure data
-for i in range(iobs_num_em): 
+for i in range(obs_num_em): 
     #load
     f = open(dir_name+'/obs'+str(i+1)+'_at_point.data') #+1 for consistency.
     tmp_inp = f.readlines()
@@ -194,9 +194,9 @@ if make_ani=='y': #chosed animation-------------------------------------------#
     #check condition
     if obs_ani=='none' or var_ani=='none' or com_ani=='none' or pla_ani=='none':
         sy.exit('When make_ani=\'y\', you have to set obs_ani, var_ani, com_ani, and pla_ani.')
-    if obs_plane_em[obs_ani]=='n':
+    if yn_obs_plane_em[obs_ani]=='n':
         sy.exit('When make_ani=\'y\', you have to set proper obs_ani.')
-    elif obs_plane_em[obs_ani]=='y':
+    elif yn_obs_plane_em[obs_ani]=='y':
         #initialize animation
         if pla_ani=='xy':
             pla_ani='_xy_'; iord1=0; iord2=1; paxis1=x_xy; paxis2=y_xy;
@@ -209,7 +209,7 @@ if make_ani=='y': #chosed animation-------------------------------------------#
             min1=x_min_ani; max1=x_max_ani; min2=z_min_ani; max2=z_max_ani;
         if   var_ani=='e': minc=e_min_ani; maxc=e_max_ani;
         elif var_ani=='h': minc=h_min_ani; maxc=h_max_ani;
-        fig_num=2*iobs_num_em+1
+        fig_num=2*obs_num_em+1
         pl.close(fig_num)
         fig, ax=pl.subplots(num=fig_num,figsize=(12,8))
         mappable=0; ims=[]; iflag_clear=0;
@@ -218,7 +218,7 @@ if make_ani=='y': #chosed animation-------------------------------------------#
             fani=np.zeros((lg_end[iord1],lg_end[iord2]))
             #load data
             if com_ani!='abs':
-                f=open(dir_name+'obs'+str(obs_ani)+'_'+var_ani+com_ani+pla_ani+str((itime+1)*iobs_samp_em)+'.data')
+                f=open(dir_name+'obs'+str(obs_ani)+'_'+var_ani+com_ani+pla_ani+str((itime+1)*obs_samp_em)+'.data')
                 tmp_inp = f.readlines()
                 f.close()
                 tmp_inp = [s.replace('\n','') for s in tmp_inp]
@@ -236,7 +236,7 @@ if make_ani=='y': #chosed animation-------------------------------------------#
                     if icom2==0:   ncom2='x'
                     elif icom2==1: ncom2='y'
                     elif icom2==2: ncom2='z'
-                    f=open(dir_name+'obs'+str(obs_ani)+'_'+var_ani+ncom2+pla_ani+str((itime+1)*iobs_samp_em)+'.data')
+                    f=open(dir_name+'obs'+str(obs_ani)+'_'+var_ani+ncom2+pla_ani+str((itime+1)*obs_samp_em)+'.data')
                     tmp_inp = f.readlines()
                     f.close()
                     tmp_inp = [s.replace('\n','') for s in tmp_inp]
@@ -264,8 +264,8 @@ if make_ani=='y': #chosed animation-------------------------------------------#
             paxis1, paxis2, ims, iflag_clear, fani, fig, ax, mappable
 elif make_ani=='all': #all animation#-----------------------------------------#
     #start
-    for iobs in range(iobs_num_em): #observation point loop
-        if obs_plane_em[iobs+1]=='y':
+    for iobs in range(obs_num_em): #observation point loop
+        if yn_obs_plane_em[iobs+1]=='y':
             for ivar in range(2): #variable loop
                 if   ivar==0: nvar='e'
                 elif ivar==1: nvar='h'
@@ -287,7 +287,7 @@ elif make_ani=='all': #all animation#-----------------------------------------#
                         elif icom==2: ncom='z'
                         elif icom==3: ncom='abs';
                         #initialize animation
-                        fig_num=2*iobs_num_em+2*3*4*iobs+3*4*ivar+4*ipla+(icom+1)
+                        fig_num=2*obs_num_em+2*3*4*iobs+3*4*ivar+4*ipla+(icom+1)
                         pl.close(fig_num)
                         fig, ax=pl.subplots(num=fig_num,figsize=(12,8))
                         mappable=0; ims=[]; iflag_clear=0;
@@ -296,7 +296,7 @@ elif make_ani=='all': #all animation#-----------------------------------------#
                             fani=np.zeros((lg_end[iord1],lg_end[iord2]))
                             #load data
                             if icom<3:
-                                f=open(dir_name+'obs'+str(iobs+1)+'_'+nvar+ncom+npla+str((itime+1)*iobs_samp_em)+'.data')
+                                f=open(dir_name+'obs'+str(iobs+1)+'_'+nvar+ncom+npla+str((itime+1)*obs_samp_em)+'.data')
                                 tmp_inp = f.readlines()
                                 f.close()
                                 tmp_inp = [s.replace('\n','') for s in tmp_inp]
@@ -314,7 +314,7 @@ elif make_ani=='all': #all animation#-----------------------------------------#
                                     if icom2==0:   ncom2='x'
                                     elif icom2==1: ncom2='y'
                                     elif icom2==2: ncom2='z'
-                                    f=open(dir_name+'obs'+str(iobs+1)+'_'+nvar+ncom2+npla+str((itime+1)*iobs_samp_em)+'.data')
+                                    f=open(dir_name+'obs'+str(iobs+1)+'_'+nvar+ncom2+npla+str((itime+1)*obs_samp_em)+'.data')
                                     tmp_inp = f.readlines()
                                     f.close()
                                     tmp_inp = [s.replace('\n','') for s in tmp_inp]
@@ -353,8 +353,8 @@ del dir_name, make_ani, obs_ani, var_ani, com_ani, pla_ani, frame_speed_ani, \
     e_min_fig, e_max_fig, h_min_fig, h_max_fig, \
     e_min_ani, e_max_ani, h_min_ani, h_max_ani, \
     x_min_ani, x_max_ani, y_min_ani, y_max_ani, z_min_ani, z_max_ani, \
-    unit_system, iperiodic, dt_em, nt_em, al_em, dl_em, lg_sta, lg_end, \
-    iobs_num_em, iobs_samp_em, obs_plane_em, e_max, h_max, \
+    unit_system, yn_periodic, dt_em, nt_em, al_em, dl_em, lg_sta, lg_end, \
+    obs_num_em, obs_samp_em, yn_obs_plane_em, e_max, h_max, \
     nt, lg_adj, r_min, x1d, y1d, z1d, x_xy, y_xy, y_yz, z_yz, x_xz, z_xz, \
     start_time, elapsed_time
 del ex, ey, ez, hx, hy, hz, name_e, name_h, name_l, name_t, t_axis
