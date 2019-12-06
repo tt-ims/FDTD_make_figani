@@ -157,12 +157,12 @@ if z_max_ani=='none': z_max_ani= max(z1d)
 #load and make figure data
 for i in range(obs_num_em): 
     #load
-    f = open(dir_name+'/obs'+str(i+1)+'_at_point.data') #+1 for consistency.
+    f = open(dir_name+'/obs'+str(i+1)+'_at_point_rt.data') #+1 for consistency.
     tmp_inp = f.readlines()
     f.close()
     tmp_inp = [s.replace('\n','') for s in tmp_inp]
     for j in range(nt): 
-        tmp_inp2=tmp_inp[j+1] #+1 for consistency.
+        tmp_inp2=tmp_inp[j+4] #+4 for skip header.
         tmp_inp2=tmp_inp2.split()
         if i==0:
             t_axis[j]=tmp_inp2[0]

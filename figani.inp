@@ -12,7 +12,7 @@ make_ani        = 'y'
 obs_ani         = 1
 var_ani         = 'e'
 com_ani         = 'abs'
-pla_ani         = 'xy'
+pla_ani         = 'xz'
 frame_speed_ani =  5.0d2
 
 #Additional inputs####################################################
