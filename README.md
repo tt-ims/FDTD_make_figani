@@ -4,7 +4,7 @@
 
 ![figure](misc/sample.gif)
 
-## Requirements
+## TEST Requirements
 
  - Python 3
  - NumPy
